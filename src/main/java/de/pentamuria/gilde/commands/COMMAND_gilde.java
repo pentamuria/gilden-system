@@ -88,7 +88,7 @@ public class COMMAND_gilde implements CommandExecutor {
                     p.sendMessage("§e/gilde deny <Name>");
                 }
             } else if(args[0].equalsIgnoreCase("create")) {
-                plugin.gildenManager.createNewGilde(p, args[1]);
+                p.sendMessage(plugin.pr + "§c/gilde create <Name> <Kuerzel>");
             } else if(args[0].equalsIgnoreCase("invite")) {
                 String gilde=plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
                 if(gilde.equalsIgnoreCase("Keine")) {
@@ -700,6 +700,12 @@ public class COMMAND_gilde implements CommandExecutor {
                     plugin.gildenManager.setGildeLog(gilde, log);
                 } else {
                     p.sendMessage(plugin.pr + " §cKeine Berechtigung!");
+                }
+            } else if(args[0].equalsIgnoreCase("create")) {
+                if(args[2].length()<=4 && args[2].length()>0) {
+                    plugin.gildenManager.createNewGilde(p, args[1], args[2]);
+                } else {
+                    p.sendMessage(plugin.pr + "Der §cGildenkürzel §7ist zu lang §8[§4Maximal 4 Zeichen§8]");
                 }
             }
         }

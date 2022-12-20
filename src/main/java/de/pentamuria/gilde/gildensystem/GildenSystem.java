@@ -2,6 +2,7 @@ package de.pentamuria.gilde.gildensystem;
 
 import de.pentamuria.gilde.commands.COMMAND_gilde;
 import de.pentamuria.gilde.events.GildenChatListener;
+import de.pentamuria.gilde.events.GildenDamageListener;
 import de.pentamuria.gilde.events.GildenInvListener;
 import de.pentamuria.gilde.events.GildenJoinListener;
 import de.pentamuria.gilde.manager.GildenInventoryManager;
@@ -26,11 +27,14 @@ public final class GildenSystem extends JavaPlugin {
     public ArrayList<Player> msgtoggle;
     public HashMap<Player, ArrayList<String>> guildinvite;
 
+    public static GildenSystem gildenSystem;
+
     public boolean globalMute = false;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        gildenSystem = this;
         loadCommands();
         loadEvents();
         loadManager();
@@ -82,6 +86,7 @@ public final class GildenSystem extends JavaPlugin {
         new GildenInvListener(this);
         new GildenChatListener(this);
         new GildenJoinListener(this);
+        new GildenDamageListener(this);
     }
 
     private void loadManager() {

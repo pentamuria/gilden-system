@@ -72,7 +72,7 @@ public class GildenManager extends GildenChatManager {
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
         if (file.exists()) {
 
-            Gilde gilde = new Gilde(name, 1, cfg.getString("Status"), cfg.getDouble("Bank"),
+            Gilde gilde = new Gilde(name, cfg.getString("Kuerzel"), 1, cfg.getString("Status"), cfg.getDouble("Bank"),
                     cfg.getString("Beschreibung"), cfg.getInt("punkte"), cfg.getString("Eröffnung"),
                     (ArrayList<String>) cfg.getStringList("Memberarray"), cfg.getInt("Memberanzahl"),
                     (ArrayList<String>) cfg.getStringList("Ältestearray"),
@@ -273,7 +273,7 @@ public class GildenManager extends GildenChatManager {
 
     }
 
-    public void createNewGilde(Player p, String gildenName) {
+    public void createNewGilde(Player p, String gildenName, String kuerzel) {
         LocalDate date = LocalDate.now();
         DateTimeFormatter df;
         df = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG);
@@ -298,7 +298,7 @@ public class GildenManager extends GildenChatManager {
             return;
         }
 
-        Gilde gilde = new Gilde(gildenName, 1, "Privat", 0.0, "&cKeine Beschreibung vorhanden", 0, d, allmembers, 1,
+        Gilde gilde = new Gilde(gildenName, kuerzel, 1, "Privat", 0.0, "&cKeine Beschreibung vorhanden", 0, d, allmembers, 1,
                 allälteste, allvize, p.getUniqueId().toString(), "&c", 5, new ItemStack(Material.BARRIER));
         alleGilden.put(gildenName, gilde);
 
@@ -623,6 +623,7 @@ public class GildenManager extends GildenChatManager {
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
         cfg.set("Name", gilde.getName());
+        cfg.set("Kuerzel", gilde.getKuerzel());
         cfg.set("Level", gilde.getLevel());
         cfg.set("Status", gilde.getStatus());
         cfg.set("Bank", gilde.getBank());
@@ -650,6 +651,7 @@ public class GildenManager extends GildenChatManager {
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
         Bukkit.getConsoleSender().sendMessage("§cErstelle Gilde...§a" + gilde);
         cfg.set("Name", gilde.getName());
+        cfg.set("Kuerzel", gilde.getKuerzel());
         cfg.set("Level", gilde.getLevel());
         cfg.set("Status", gilde.getStatus());
         cfg.set("Bank", gilde.getBank());

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Gilde {
 
     String name;
+    String kuerzel;
     int level;
     String status;
     double bank;
@@ -25,6 +26,7 @@ public class Gilde {
     /**
      * Konstruktor der Gilde
      * @param name
+     * @param kuerzel
      * @param level
      * @param status
      * @param bank
@@ -40,10 +42,11 @@ public class Gilde {
      * @param maxMembers
      * @param symbol
      */
-    public Gilde(String name, int level, String status, double bank, String beschreibung, int punkte, String eröffnung,
+    public Gilde(String name, String kuerzel, int level, String status, double bank, String beschreibung, int punkte, String eröffnung,
                  ArrayList<String> memberarray, int memberanzahl, ArrayList<String> ältestearray,
                  ArrayList<String> vizearray, String anführer, String farbe, int maxMembers, ItemStack symbol) {
         this.name = name;
+        this.kuerzel = kuerzel;
         this.level = level;
         this.status = status;
         this.bank = bank;
@@ -62,6 +65,14 @@ public class Gilde {
 
     public String getName() {
         return name;
+    }
+
+    public String getKuerzel() {
+        return kuerzel;
+    }
+
+    public void setKuerzel(String kuerzel) {
+        this.kuerzel = kuerzel;
     }
     public void setName(String name) {
         this.name = name;
