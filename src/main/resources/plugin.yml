@@ -1,0 +1,8 @@
+name: GildenSystem
+version: '${project.version}'
+main: de.pentamuria.gilde.gildensystem.GildenSystem
+api-version: 1.19
+authors: [ MikadoBlanket ]
+description: Guild System for Pentamuria
+commands:
+  gilde:
