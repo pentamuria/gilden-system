@@ -28,7 +28,12 @@ public class GildenChatListener implements Listener {
                 for(Player all : Bukkit.getOnlinePlayers()) {
                     String message = e.getMessage().replace("@all", "");
                     String color = ChatColor.translateAlternateColorCodes('&', message);
-                    all.sendMessage("§f[@All] §8[" + plugin.gildenManager.getPlayerGildeWithColor(p) + "§8] §3" + p.getName() + "§f: §7" + color);
+                    if(plugin.gildenManager.hasGilde(p)) {
+                        all.sendMessage("§f[@All] §8[" + plugin.gildenManager.getPlayerGildeWithColor(p) + "§8] " + plugin.gildenManager.getPlayerColor(p) + p.getName() + "§f: §7" + color);
+                    } else {
+                        all.sendMessage("§f[@All] §8[" + plugin.gildenManager.getPlayerGildeWithColor(p) + "§8] §3" + p.getName() + "§f: §7" + color);
+                    }
+
                 }
             } else {
                 String message = e.getMessage();

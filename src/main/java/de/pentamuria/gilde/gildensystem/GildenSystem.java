@@ -39,6 +39,7 @@ public final class GildenSystem extends JavaPlugin {
         loadEvents();
         loadManager();
 
+        Bukkit.getConsoleSender().sendMessage("§7-----------§8[§aGilden§8]§7-----------");
         Bukkit.getConsoleSender().sendMessage(prefix + "Das Plugin wurde §agestartet!");
 
         /********* Load Gilden Data **********/
@@ -52,6 +53,7 @@ public final class GildenSystem extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§6Gilden: " + gildenManager.getAlleGilden());
         Bukkit.getConsoleSender().sendMessage("§e" + gildenManager.getAllePlayerGilden().size() + " Spieler §ageladen" );
         Bukkit.getConsoleSender().sendMessage("§6Spieler: " + gildenManager.getAllePlayerGilden());
+        Bukkit.getConsoleSender().sendMessage("§7---------------------------------");
 
         // Start Countdowns
         startGildenLoader();
