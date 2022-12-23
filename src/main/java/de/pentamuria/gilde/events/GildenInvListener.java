@@ -282,8 +282,8 @@ public class GildenInvListener implements Listener {
                         String gilde = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
                         plugin.gildenInvManager.openGildenLogInv(p, gilde);
                     } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§a§lLevel:")) {
-                        String gilde = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
-                        plugin.gildenInvManager.openGildenLevelInv(p, gilde);
+                        //String gilde = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
+                        //plugin.gildenInvManager.openGildenLevelInv(p, gilde);
                     } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§6§lBank:")) {
                         String gilde = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
                         if(plugin.gildenManager.getGilde(gilde).getMemberarray().contains(p.getUniqueId().toString())) {

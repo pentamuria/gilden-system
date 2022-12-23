@@ -1,5 +1,7 @@
 package de.pentamuria.gilde.commands;
 
+import de.pentamuria.gilde.countdowns.BaseCountdown;
+import de.pentamuria.gilde.gilde.Gilde;
 import de.pentamuria.gilde.gildensystem.GildenSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +30,7 @@ public class COMMAND_gilde implements CommandExecutor {
             p.sendMessage("");
             p.sendMessage("§e/gilde info");
             p.sendMessage("§e/gilde manager");
-            p.sendMessage("§e/gilde help");
+            p.sendMessage("§e/gilde bag");
             p.sendMessage("§e/gilde create <Name>");
             p.sendMessage("§e/gilde invite <Name>");
             p.sendMessage("§e/gilde kick <Name>");
@@ -63,6 +65,15 @@ public class COMMAND_gilde implements CommandExecutor {
                 plugin.gildenInvManager.openManagerInventory(p, gilde);
             } else if(args[0].equalsIgnoreCase("browser")) {
                 plugin.gildenInvManager.openMainBrowserInventory(p);
+            } else if(args[0].equalsIgnoreCase("bag")) {
+                Gilde gilde=plugin.gildenManager.getGilde(plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString()));
+                if(!gilde.isBagOpen()) {
+                    p.openInventory(gilde.getBag());
+                    gilde.setBagOpen(true);
+                } else {
+                    p.sendMessage(plugin.pr + "§7Der Gildenrucksack ist §cbereits geöffnet!");
+                }
+
             }
         } else if(args.length==2) {
             if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("hilfe")) {
@@ -89,6 +100,42 @@ public class COMMAND_gilde implements CommandExecutor {
                 }
             } else if(args[0].equalsIgnoreCase("create")) {
                 p.sendMessage(plugin.pr + "§c/gilde create <Name> <Kuerzel>");
+            } else if(args[0].equalsIgnoreCase("base")) {
+                int base = Integer.valueOf(args[1]);
+                String gildeName = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
+                Gilde gilde = plugin.gildenManager.getGilde(gildeName);
+                if (gildeName.equalsIgnoreCase("Keine")) {
+                    p.sendMessage(plugin.pr + " §cDu bist in keiner Gilde");
+                    return true;
+                }
+                if (base == 1) {
+                    if (gilde.getBase1() != null) {
+                        new BaseCountdown(p).start(plugin, gilde.getBase1());
+                    } else {
+                        p.sendMessage(plugin.pr + "§7Ihre Gilde hat §ckeine §bBase 1");
+                    }
+                } else if (base == 2) {
+                    if (gilde.getBase2() != null) {
+                        new BaseCountdown(p).start(plugin, gilde.getBase2());
+                    } else {
+                        p.sendMessage(plugin.pr + "§7Ihre Gilde hat §ckeine §bBase 2");
+                    }
+                }
+            } else if(args[0].equalsIgnoreCase("setbase")) {
+                int base = Integer.valueOf(args[1]);
+                String gildeName = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
+                Gilde gilde = plugin.gildenManager.getGilde(gildeName);
+                if (gildeName.equalsIgnoreCase("Keine")) {
+                    p.sendMessage(plugin.pr + " §cDu bist in keiner Gilde");
+                    return true;
+                }
+                if(base == 1) {
+                    gilde.setBase1(p.getLocation());
+                    p.sendMessage(plugin.pr + "Ihre Gilden Basis §d1 §7wurde §agesetzt!");
+                } else if(base == 2) {
+                    gilde.setBase2(p.getLocation());
+                    p.sendMessage(plugin.pr + "Ihre Gilden Basis §d2 §7wurde §agesetzt!");
+                }
             } else if(args[0].equalsIgnoreCase("invite")) {
                 String gilde=plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
                 if(gilde.equalsIgnoreCase("Keine")) {
@@ -703,6 +750,10 @@ public class COMMAND_gilde implements CommandExecutor {
                 }
             } else if(args[0].equalsIgnoreCase("create")) {
                 if(args[2].length()<=4 && args[2].length()>0) {
+                    if (args[1].equalsIgnoreCase("Keine") || args[1].equalsIgnoreCase("Solo")) {
+                        p.sendMessage(plugin.pr + "§cBitte benutze einen anderen Namen");
+                        return true;
+                    }
                     plugin.gildenManager.createNewGilde(p, args[1], args[2]);
                 } else {
                     p.sendMessage(plugin.pr + "Der §cGildenkürzel §7ist zu lang §8[§4Maximal 4 Zeichen§8]");

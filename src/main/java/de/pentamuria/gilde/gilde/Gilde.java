@@ -1,5 +1,7 @@
 package de.pentamuria.gilde.gilde;
 
+import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -22,6 +24,10 @@ public class Gilde {
     String farbe;
     int maxMembers;
     ItemStack symbol;
+    Inventory bag;
+    boolean isBagOpen;
+    Location base1;
+    Location base2;
 
     /**
      * Konstruktor der Gilde
@@ -44,7 +50,8 @@ public class Gilde {
      */
     public Gilde(String name, String kuerzel, int level, String status, double bank, String beschreibung, int punkte, String eröffnung,
                  ArrayList<String> memberarray, int memberanzahl, ArrayList<String> ältestearray,
-                 ArrayList<String> vizearray, String anführer, String farbe, int maxMembers, ItemStack symbol) {
+                 ArrayList<String> vizearray, String anführer, String farbe, int maxMembers, ItemStack symbol, Inventory bag,
+                 Location base1, Location base2) {
         this.name = name;
         this.kuerzel = kuerzel;
         this.level = level;
@@ -61,6 +68,10 @@ public class Gilde {
         this.farbe = farbe;
         this.maxMembers = maxMembers;
         this.symbol = symbol;
+        this.bag = bag;
+        this.isBagOpen = false;
+        this.base1 = base1;
+        this.base2 = base2;
     }
 
     public String getName() {
@@ -161,6 +172,28 @@ public class Gilde {
     public void setSymbol(ItemStack symbol) {
         this.symbol = symbol;
     }
-
-
+    public Inventory getBag() {
+        return bag;
+    }
+    public void setBag(Inventory bag) {
+        this.bag = bag;
+    }
+    public boolean isBagOpen() {
+        return isBagOpen;
+    }
+    public void setBagOpen(boolean bagOpen) {
+        isBagOpen = bagOpen;
+    }
+    public Location getBase1() {
+        return base1;
+    }
+    public Location getBase2() {
+        return base2;
+    }
+    public void setBase1(Location base1) {
+        this.base1 = base1;
+    }
+    public void setBase2(Location base2) {
+        this.base2 = base2;
+    }
 }

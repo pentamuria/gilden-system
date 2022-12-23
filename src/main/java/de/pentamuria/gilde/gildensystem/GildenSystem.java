@@ -1,10 +1,7 @@
 package de.pentamuria.gilde.gildensystem;
 
 import de.pentamuria.gilde.commands.COMMAND_gilde;
-import de.pentamuria.gilde.events.GildenChatListener;
-import de.pentamuria.gilde.events.GildenDamageListener;
-import de.pentamuria.gilde.events.GildenInvListener;
-import de.pentamuria.gilde.events.GildenJoinListener;
+import de.pentamuria.gilde.events.*;
 import de.pentamuria.gilde.manager.GildenInventoryManager;
 import de.pentamuria.gilde.manager.GildenManager;
 import org.bukkit.Bukkit;
@@ -89,6 +86,7 @@ public final class GildenSystem extends JavaPlugin {
         new GildenChatListener(this);
         new GildenJoinListener(this);
         new GildenDamageListener(this);
+        new GildenInvCloseListener(this);
     }
 
     private void loadManager() {

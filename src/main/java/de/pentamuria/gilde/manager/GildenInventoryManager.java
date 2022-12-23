@@ -88,7 +88,7 @@ public class GildenInventoryManager {
         ItemMeta meta7 = item7.getItemMeta();
         meta7.setDisplayName("§bDiamantschwert");
         ArrayList<String> lore7 = new ArrayList<String>();
-        lore7.add("§6§l<Premium>");
+        lore7.add("§e§l<Auswählen>");
         meta7.setLore(lore7);
         item7.setItemMeta(meta7);
 
@@ -96,7 +96,7 @@ public class GildenInventoryManager {
         ItemMeta meta8 = item8.getItemMeta();
         meta8.setDisplayName("§bBogen");
         ArrayList<String> lore8 = new ArrayList<String>();
-        lore8.add("§6§l<Premium>");
+        lore8.add("§e§l<Auswählen>");
         meta8.setLore(lore8);
         item8.setItemMeta(meta8);
 

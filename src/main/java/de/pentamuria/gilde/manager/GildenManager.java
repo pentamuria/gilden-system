@@ -2,12 +2,15 @@ package de.pentamuria.gilde.manager;
 
 import de.pentamuria.gilde.gilde.Gilde;
 import de.pentamuria.gilde.gildensystem.GildenSystem;
+import de.pentamuria.gilde.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.FileUtil;
 
@@ -18,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GildenManager extends GildenChatManager {
 
@@ -71,13 +75,29 @@ public class GildenManager extends GildenChatManager {
         File file = new File("plugins/Gilden/" + name, "gildeninfos.yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
         if (file.exists()) {
+            Inventory inv = Bukkit.createInventory(null, 5*9, "§aGilden Rucksack");
+            if(cfg.contains("Bag")) {
+                ItemStack[] content = ((List<ItemStack>) cfg.get("Bag")).toArray(new ItemStack[0]);
+                inv.setContents(content);
+            } else {
+                inv.addItem(new ItemStack(Material.OAK_LOG, 1));
+            }
+            Location base1 = null;
+            Location base2 = null;
+            if(cfg.contains("Base1") && cfg.get("Base1")!=null) {
+                base1 = (Location) cfg.get("Base1");
+            }
+            if(cfg.contains("Base2") && cfg.get("Base2")!=null) {
+                base2 = (Location) cfg.get("Base2");
+            }
 
             Gilde gilde = new Gilde(name, cfg.getString("Kuerzel"), 1, cfg.getString("Status"), cfg.getDouble("Bank"),
                     cfg.getString("Beschreibung"), cfg.getInt("punkte"), cfg.getString("Eröffnung"),
                     (ArrayList<String>) cfg.getStringList("Memberarray"), cfg.getInt("Memberanzahl"),
                     (ArrayList<String>) cfg.getStringList("Ältestearray"),
                     (ArrayList<String>) cfg.getStringList("Vizearray"), cfg.getString("Anführer"),
-                    cfg.getString("Farbe"), cfg.getInt("MaxMembers"), (ItemStack) cfg.get("Symbol"));
+                    cfg.getString("Farbe"), cfg.getInt("MaxMembers"), (ItemStack) cfg.get("Symbol"), inv,
+                    base1, base2);
             return gilde;
 
         } else {
@@ -297,9 +317,11 @@ public class GildenManager extends GildenChatManager {
             p.sendMessage(plugin.pr + " §cDu bist bereits in einer Gilde");
             return;
         }
-
+        Inventory inv = Bukkit.createInventory(null, 9*6, "§aGilden Rucksack");
+        inv.addItem(new ItemStack(Material.OAK_LOG, 1));
         Gilde gilde = new Gilde(gildenName, kuerzel, 1, "Privat", 0.0, "&cKeine Beschreibung vorhanden", 0, d, allmembers, 1,
-                allälteste, allvize, p.getUniqueId().toString(), "&c", 5, new ItemStack(Material.BARRIER));
+                allälteste, allvize, p.getUniqueId().toString(), "&c", 10, new ItemStack(Material.BARRIER), inv,
+                null, null);
         alleGilden.put(gildenName, gilde);
 
         p.sendMessage("§e§lGilden-Eröffnung");
@@ -637,6 +659,9 @@ public class GildenManager extends GildenChatManager {
         cfg.set("Vizearray", gilde.getVizearray());
         cfg.set("Anführer", gilde.getAnführer());
         cfg.set("Symbol", gilde.getSymbol());
+        cfg.set("Bag", gilde.getBag().getContents());
+        cfg.set("Base1", gilde.getBase1());
+        cfg.set("Base2", gilde.getBase2());
 
         cfg.set("MaxMembers", gilde.getMaxMembers());
         try {
@@ -665,6 +690,9 @@ public class GildenManager extends GildenChatManager {
         cfg.set("Vizearray", gilde.getVizearray());
         cfg.set("Anführer", gilde.getAnführer());
         cfg.set("Symbol", gilde.getSymbol());
+        cfg.set("Bag", gilde.getBag().getContents());
+        cfg.set("Base1", gilde.getBase1());
+        cfg.set("Base2", gilde.getBase2());
 
         cfg.set("MaxMembers", gilde.getMaxMembers());
         try {
