@@ -66,6 +66,11 @@ public class COMMAND_gilde implements CommandExecutor {
             } else if(args[0].equalsIgnoreCase("browser")) {
                 plugin.gildenInvManager.openMainBrowserInventory(p);
             } else if(args[0].equalsIgnoreCase("bag")) {
+                String gildeStr=plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
+                if(gildeStr.equalsIgnoreCase("Keine")) {
+                    p.sendMessage(plugin.pr + " §cDu bist in keiner Gilde");
+                    return true;
+                }
                 Gilde gilde=plugin.gildenManager.getGilde(plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString()));
                 if(!gilde.isBagOpen()) {
                     p.openInventory(gilde.getBag());

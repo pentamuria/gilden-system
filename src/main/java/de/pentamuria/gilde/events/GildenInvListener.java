@@ -201,10 +201,10 @@ public class GildenInvListener implements Listener {
             }
         } else if(e.getView().getTitle().equalsIgnoreCase("§aWähle Gilden-Symbol")) {
             e.setCancelled(true);
-            if(e.getView().getTitle().equalsIgnoreCase("§aWähle Gilden-Symbol")) {
-                if(e.getCurrentItem().getType().equals(Material.DIAMOND_SWORD)) {
+            if (e.getView().getTitle().equalsIgnoreCase("§aWähle Gilden-Symbol")) {
+                if (e.getCurrentItem().getType().equals(Material.DIAMOND_SWORD)) {
                     plugin.gildenManager.changeGildenSymbol(plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString()), new ItemStack(Material.DIAMOND_SWORD));
-                } else if(e.getCurrentItem().getType().equals(Material.BOW)) {
+                } else if (e.getCurrentItem().getType().equals(Material.BOW)) {
                     plugin.gildenManager.changeGildenSymbol(plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString()), new ItemStack(Material.BOW));
                 } else {
                     plugin.gildenManager.changeGildenSymbol(plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString()), new ItemStack(e.getCurrentItem().getType()));
@@ -243,6 +243,8 @@ public class GildenInvListener implements Listener {
                 }, 1);
                 p.sendMessage(plugin.pr + " §aDu hast eine Gilde erstellt!");
             }
+        } else if(e.getView().getTitle().equalsIgnoreCase("§aEröffnungsinformationen")) {
+            e.setCancelled(true);
         } else if(e.getView().getTitle().equalsIgnoreCase("§aGilden-Manager")) {
             e.setCancelled(true);
             if(e.getCurrentItem()!=null) {

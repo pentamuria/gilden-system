@@ -317,7 +317,7 @@ public class GildenManager extends GildenChatManager {
             p.sendMessage(plugin.pr + " §cDu bist bereits in einer Gilde");
             return;
         }
-        Inventory inv = Bukkit.createInventory(null, 9*6, "§aGilden Rucksack");
+        Inventory inv = Bukkit.createInventory(null, 9*5, "§aGilden Rucksack");
         inv.addItem(new ItemStack(Material.OAK_LOG, 1));
         Gilde gilde = new Gilde(gildenName, kuerzel, 1, "Privat", 0.0, "&cKeine Beschreibung vorhanden", 0, d, allmembers, 1,
                 allälteste, allvize, p.getUniqueId().toString(), "&c", 10, new ItemStack(Material.BARRIER), inv,
