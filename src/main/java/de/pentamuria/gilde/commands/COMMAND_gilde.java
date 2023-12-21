@@ -26,16 +26,7 @@ public class COMMAND_gilde implements CommandExecutor {
         Player p = (Player)sender;
 
         if(args.length==0) {
-            p.sendMessage("§a§lGilden-Hilfe §8[1]");
-            p.sendMessage("");
-            p.sendMessage("§e/gilde info");
-            p.sendMessage("§e/gilde manager");
-            p.sendMessage("§e/gilde bag");
-            p.sendMessage("§e/gilde create <Name>");
-            p.sendMessage("§e/gilde invite <Name>");
-            p.sendMessage("§e/gilde kick <Name>");
-
-
+            sendHelp(p, 1);
         } else if(args.length==1) {
             if(args[0].equalsIgnoreCase("leave")) {
                 String gilde=plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
@@ -79,29 +70,15 @@ public class COMMAND_gilde implements CommandExecutor {
                     p.sendMessage(plugin.pr + "§7Der Gildenrucksack ist §cbereits geöffnet!");
                 }
 
+            } else {
+                sendHelp(p, 1);
             }
         } else if(args.length==2) {
             if(args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("hilfe")) {
                 if(args[1].equalsIgnoreCase("1")) {
-                    p.sendMessage("§a§lGilden-Hilfe §8[1]");
-                    p.sendMessage("");
-                    p.sendMessage("§e/gilde info");
-                    p.sendMessage("§e/gilde manager");
-                    p.sendMessage("§e/gilde help");
-                    p.sendMessage("§e/gilde create <Name>");
-                    p.sendMessage("§e/gilde invite <Name>");
-                    p.sendMessage("§e/gilde kick <Name>");
+                    sendHelp(p, 1);
                 } else if(args[1].equalsIgnoreCase("2")) {
-                    p.sendMessage("§a§lGilden-Hilfe §8[2]");
-                    p.sendMessage("");
-                    p.sendMessage("§e/gilde promote <Name>");
-                    p.sendMessage("§e/gilde demote <Name>");
-                    p.sendMessage("§e/gilde delete");
-                    p.sendMessage("§e/gilde join <Name>");
-                    p.sendMessage("§e/gilde leave");
-                    p.sendMessage("§e/gilde status <öffentlich|privat>");
-                    p.sendMessage("§e/gilde accept <Name>");
-                    p.sendMessage("§e/gilde deny <Name>");
+                    sendHelp(p, 2);
                 }
             } else if(args[0].equalsIgnoreCase("create")) {
                 p.sendMessage(plugin.pr + "§c/gilde create <Name> <Kuerzel>");
@@ -664,22 +641,22 @@ public class COMMAND_gilde implements CommandExecutor {
                     p.sendMessage(plugin.pr + " §cDieser Spieler ist nicht online!");
                 }
             } else if(args[0].equalsIgnoreCase("status")) {
-                String gilde=plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
-                if(gilde.equalsIgnoreCase("Keine")) {
+                String gilde = plugin.gildenManager.getPlayerGilde(p.getUniqueId().toString());
+                if (gilde.equalsIgnoreCase("Keine")) {
                     p.sendMessage(plugin.pr + " §cDu bist in keiner Gilde");
                     return true;
                 }
 
-                if(plugin.gildenManager.getGilde(gilde).getAnführer().equalsIgnoreCase(p.getUniqueId().toString())) {
-                    if(args[1].equalsIgnoreCase("Privat")) {
+                if (plugin.gildenManager.getGilde(gilde).getAnführer().equalsIgnoreCase(p.getUniqueId().toString())) {
+                    if (args[1].equalsIgnoreCase("Privat")) {
                         plugin.gildenManager.setGildenStatus(gilde, "Privat");
                         plugin.gildenManager.sendAllGildenPlayerMessage(gilde, "§3Die Gilde ist nun §cprivat", p);
-                        p.sendMessage("§8["+ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §3Die Gilde ist nun §cprivat");
+                        p.sendMessage("§8[" + ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §3Die Gilde ist nun §cprivat");
                         ArrayList<String> log = plugin.gildenManager.getGildeLog(gilde);
-                        if(log.isEmpty()) {
+                        if (log.isEmpty()) {
                             log.add("§3Die Gilde wurde von §c" + p.getName() + " §3auf §cPrivat §3gestellt");
                         } else {
-                            if(log.size()>=27) {
+                            if (log.size() >= 27) {
                                 log.remove(0);
                                 log.add("§3Die Gilde wurde von §c" + p.getName() + " §3auf §cPrivat §3gestellt");
                             } else {
@@ -687,15 +664,15 @@ public class COMMAND_gilde implements CommandExecutor {
                             }
                         }
                         plugin.gildenManager.setGildeLog(gilde, log);
-                    } else if(args[1].equalsIgnoreCase("Öffentlich")) {
+                    } else if (args[1].equalsIgnoreCase("Öffentlich")) {
                         plugin.gildenManager.setGildenStatus(gilde, "Öffentlich");
                         plugin.gildenManager.sendAllGildenPlayerMessage(gilde, "§3Die Gilde ist nun §aöffentlich", p);
-                        p.sendMessage("§8["+ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §3Die Gilde ist nun §aöffentlich");
+                        p.sendMessage("§8[" + ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §3Die Gilde ist nun §aöffentlich");
                         ArrayList<String> log = plugin.gildenManager.getGildeLog(gilde);
-                        if(log.isEmpty()) {
+                        if (log.isEmpty()) {
                             log.add("§3Die Gilde wurde von §c" + p.getName() + " §3auf §aÖffentlich §3gestellt");
                         } else {
-                            if(log.size()>=27) {
+                            if (log.size() >= 27) {
                                 log.remove(0);
                                 log.add("§3Die Gilde wurde von §c" + p.getName() + " §3auf §aÖffentlich §3gestellt");
                             } else {
@@ -707,13 +684,25 @@ public class COMMAND_gilde implements CommandExecutor {
                         p.sendMessage(plugin.pr + " §c/gilde status <öffentlich|");
                     }
                 } else {
-                    p.sendMessage("§8["+ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §cKeine Berechtigung");
+                    p.sendMessage("§8[" + ChatColor.translateAlternateColorCodes('&', plugin.gildenManager.getGilde(gilde).getFarbe()) + gilde + "§8] §cKeine Berechtigung");
                 }
 
-
-
-            } else if(args[0].equalsIgnoreCase("manager")) {
-
+            } else if(args[0].equalsIgnoreCase("chest")) {
+                if(plugin.gildenManager.hasGilde(p)) {
+                    if (args[1].equalsIgnoreCase("lock")) {
+                        plugin.chestLockManager.addPlayerLockingChest(p);
+                        p.sendMessage("§7Du kannst jetzt eine Kiste §asichern");
+                    } else if (args[1].equalsIgnoreCase("unlock")) {
+                        plugin.chestLockManager.addPlayerUnLockingChest(p);
+                        p.sendMessage("§7Du kannst jetzt eine Kiste §centsichern");
+                    } else {
+                        p.sendMessage("§e/gilde chest <lock|unlock>");
+                    }
+                } else {
+                    p.sendMessage("§cDu musst in einer Gilde sein");
+                }
+            } else {
+                sendHelp(p, 1);
             }
         } else if(args.length>=2) {
             if(args[0].equalsIgnoreCase("setdescription") || args[0].equalsIgnoreCase("setbeschreibung")) {
@@ -769,5 +758,34 @@ public class COMMAND_gilde implements CommandExecutor {
 
 
         return true;
+    }
+
+    /**
+     * Send Gilden Help to a Player
+     * @param p
+     * @param site
+     */
+    private void sendHelp(Player p, int site) {
+        p.sendMessage("");
+        p.sendMessage("§a§lGilden-Hilfe §8["+site+"]");
+        p.sendMessage("");
+        if(site == 2) {
+            p.sendMessage("§e/gilde promote <Name>");
+            p.sendMessage("§e/gilde demote <Name>");
+            p.sendMessage("§e/gilde delete");
+            p.sendMessage("§e/gilde join <Name>");
+            p.sendMessage("§e/gilde leave");
+            p.sendMessage("§e/gilde status <öffentlich|privat>");
+            p.sendMessage("§e/gilde accept <Name>");
+            p.sendMessage("§e/gilde deny <Name>");
+        } else {
+            p.sendMessage("§e/gilde manager");
+            p.sendMessage("§e/gilde help <1|2>");
+            p.sendMessage("§e/gilde create <Name> <Kuerzel>");
+            p.sendMessage("§e/gilde invite <Name>");
+            p.sendMessage("§e/gilde kick <Name>");
+            p.sendMessage("§e/gilde setbase <1|2>");
+            p.sendMessage("§e/gilde base <1|2>");
+        }
     }
 }

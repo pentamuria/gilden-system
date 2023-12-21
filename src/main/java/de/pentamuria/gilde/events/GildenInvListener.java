@@ -233,11 +233,13 @@ public class GildenInvListener implements Listener {
                 meta1.setLore(lore1);
                 item1.setItemMeta(meta1);
                 inv.setItem(4, item1);
+
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 
                     @Override
                     public void run() {
                         p.openInventory(inv);
+                        plugin.gildenManager.refreshPlayerScoreboardTeam(p, plugin.gildenManager.getGilde(name));
                     }
 
                 }, 1);

@@ -22,6 +22,7 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class GildenManager extends GildenChatManager {
 
@@ -245,12 +246,14 @@ public class GildenManager extends GildenChatManager {
         int zahl = getGilde(gilde).getMemberanzahl() - 1;
         getGilde(gilde).setMemberanzahl(zahl);
 
+        refreshPlayerScoreboardTeam(Bukkit.getPlayer(UUID.fromString(uuid)));
+
 
     }
 
     public void removeGilde(Player p, String name) {
-        p.sendMessage(plugin.pr + " §cDu hast deine Gilde gelöscht!");
-        sendAllGildenPlayerMessage(name, "§Diese Gilde wurde gelöscht!", p);
+
+        sendAllGildenPlayerMessage(name, "§Diese Gilde wird gelöscht...", p);
 
         removePlayerFromGilde(getGilde(name).getAnführer(), name);
         try {
@@ -286,9 +289,7 @@ public class GildenManager extends GildenChatManager {
             }
 
         }, 1);
-
-
-
+        p.sendMessage(plugin.pr + " §cDu hast deine Gilde gelöscht!");
 
 
     }
@@ -438,8 +439,55 @@ public class GildenManager extends GildenChatManager {
         memberarray.add(player.getUniqueId().toString());
         gilde.setMemberarray(memberarray);
         gilde.setMemberanzahl(gilde.getMemberanzahl() + 1);
-
         updateGilde(gildeName, gilde);
+        refreshPlayerScoreboardTeam(player, gilde);
+    }
+
+    /**
+     * Refreshes Sidebar Scoreboard of Player
+     * Refreshes nametag of player for everyone
+     * @param p
+     * @param gilde
+     */
+    public void refreshPlayerScoreboardTeam(Player p, Gilde gilde) {
+        plugin.scoreboardAPI.getPlayerScoreboard().updateGilde(p, getPlayerGildeWithColor(gilde.getName()));
+        String colorCode = gilde.getFarbe(); // Your color code
+        char code = colorCode.charAt(1); // Extract the color code character after the "&"
+        ChatColor chatColor = ChatColor.getByChar(code);
+        String kuerzel = gilde.getKuerzel() + " ";
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            plugin.scoreboardAPI.getPlayerScoreboard().getCustomScoreboard(all).removePlayer(p);
+            plugin.scoreboardAPI.getPlayerScoreboard().getCustomScoreboard(all).addPlayer(
+                    p,
+                    getPlayerGilde(p.getUniqueId().toString()),
+                    kuerzel,
+                    " §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths(),
+                    chatColor);
+        }
+    }
+
+    /**
+     * For leaving the guild!
+     * Refreshes Sidebar Scorebooard of Player
+     * Refreshes nametag of player for everyone
+     * @param p
+     */
+    public void refreshPlayerScoreboardTeam(Player p) {
+        plugin.scoreboardAPI.getPlayerScoreboard().updateGilde(p, getPlayerGildeWithColor(p));
+        String colorCode = hasGilde(p) ? getGilde(getPlayerGilde(p.getUniqueId().toString())).getFarbe() : "&c"; // Your color code
+        char code = colorCode.charAt(1); // Extract the color code character after the "&"
+        ChatColor chatColor = ChatColor.getByChar(code);
+        String kuerzel = hasGilde(p) ? getGilde(getPlayerGilde(p.getUniqueId().toString())).getKuerzel() + " " : "";
+
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            plugin.scoreboardAPI.getPlayerScoreboard().getCustomScoreboard(all).removePlayer(p);
+            plugin.scoreboardAPI.getPlayerScoreboard().getCustomScoreboard(all).addPlayer(
+                    p,
+                    getPlayerGilde(p.getUniqueId().toString()),
+                    kuerzel,
+                    " §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths(),
+                    chatColor);
+        }
     }
 
     public void setGildenStatus(String gildenName, String status) {

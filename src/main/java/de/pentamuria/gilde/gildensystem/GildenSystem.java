@@ -2,8 +2,11 @@ package de.pentamuria.gilde.gildensystem;
 
 import de.pentamuria.gilde.commands.COMMAND_gilde;
 import de.pentamuria.gilde.events.*;
+import de.pentamuria.gilde.manager.ChestLockManager;
 import de.pentamuria.gilde.manager.GildenInventoryManager;
 import de.pentamuria.gilde.manager.GildenManager;
+import de.pentamuria.scoreboard.pentamuriascoreboardapi.PentamuriaScoreboardAPI;
+import de.pentamuria.statistics.statisticsapi.StatisticsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +30,9 @@ public final class GildenSystem extends JavaPlugin {
     public static GildenSystem gildenSystem;
 
     public boolean globalMute = false;
+    public PentamuriaScoreboardAPI scoreboardAPI;
+    public StatisticsAPI statsAPI;
+    public ChestLockManager chestLockManager;
 
     @Override
     public void onEnable() {
@@ -38,6 +44,21 @@ public final class GildenSystem extends JavaPlugin {
 
         Bukkit.getConsoleSender().sendMessage("§7-----------§8[§aGilden§8]§7-----------");
         Bukkit.getConsoleSender().sendMessage(prefix + "Das Plugin wurde §agestartet!");
+
+        if(Bukkit.getServer().getPluginManager().getPlugin("PentamuriaScoreboardAPI")!=null) {
+            scoreboardAPI = (PentamuriaScoreboardAPI) Bukkit.getServer().getPluginManager().getPlugin("PentamuriaScoreboardAPI");
+            Bukkit.getConsoleSender().sendMessage(pr + "Verbindung zur §bPentamuriaScoreboardAPI §7wurde §ainitialisiert");
+        } else {
+            Bukkit.getConsoleSender().sendMessage(pr + "Verbindung zur §bPentamuriaScoreboardAPI §ist §4fehlgeschlagen");
+            Bukkit.getConsoleSender().sendMessage(pr + "§cBitte sofort die §bPentamuriaScoreboardAPI §chinzufügen");
+        }
+        if(Bukkit.getServer().getPluginManager().getPlugin("StatisticsAPI")!=null) {
+            statsAPI = (StatisticsAPI) Bukkit.getServer().getPluginManager().getPlugin("StatisticsAPI");
+            Bukkit.getConsoleSender().sendMessage(pr + "Verbindung zur §aStatisticsAPI §7wurde §ainitialisiert");
+        } else {
+            Bukkit.getConsoleSender().sendMessage(pr + "Verbindung zur §aStatisticsAPI §ist §4fehlgeschlagen");
+            Bukkit.getConsoleSender().sendMessage(pr + "§cBitte sofort die §aStatisticsAPI §chinzufügen");
+        }
 
         /********* Load Gilden Data **********/
         long a = System.currentTimeMillis();
@@ -51,6 +72,9 @@ public final class GildenSystem extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§e" + gildenManager.getAllePlayerGilden().size() + " Spieler §ageladen" );
         Bukkit.getConsoleSender().sendMessage("§6Spieler: " + gildenManager.getAllePlayerGilden());
         Bukkit.getConsoleSender().sendMessage("§7---------------------------------");
+
+        chestLockManager = new ChestLockManager(this);
+        chestLockManager.loadLockedChests();
 
         // Start Countdowns
         startGildenLoader();
@@ -71,6 +95,7 @@ public final class GildenSystem extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§e" + gildenManager.getAlleGilden().size() + " Gilden §agespeichert" );
         Bukkit.getConsoleSender().sendMessage("§6Gilden: " + gildenManager.getAlleGilden());
         Bukkit.getConsoleSender().sendMessage("§e" + gildenManager.getAllePlayerGilden().size() + " Spieler §agespeichert");
+        chestLockManager.saveLockedChestsToFile();
     }
 
     private void loadCommands() {
@@ -87,6 +112,7 @@ public final class GildenSystem extends JavaPlugin {
         new GildenJoinListener(this);
         new GildenDamageListener(this);
         new GildenInvCloseListener(this);
+        new ChestLockListener(this);
     }
 
     private void loadManager() {
@@ -118,6 +144,7 @@ public final class GildenSystem extends JavaPlugin {
                 gildenManager.updatedGilden = 0;
                 gildenManager.neueGilden = 0;
                 gildenManager.gelöschteGilden = 0;
+                chestLockManager.saveLockedChestsToFile();
 
             }
 
