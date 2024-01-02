@@ -464,6 +464,8 @@ public class GildenManager extends GildenChatManager {
                     " §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths(),
                     chatColor);
         }
+        p.setPlayerListName(plugin.gildenManager.getPlayerGildeWithColor(p) +" §8| " + plugin.gildenManager.getPlayerColor(p) + p.getName() + " §8| §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths() + " Tode");
+
     }
 
     /**
@@ -488,6 +490,8 @@ public class GildenManager extends GildenChatManager {
                     " §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths(),
                     chatColor);
         }
+        p.setPlayerListName("§a" + p.getName() + " §8| §c" + plugin.statsAPI.stats.getPlayerStats(p.getUniqueId().toString()).getDeaths() + " Tode");
+
     }
 
     public void setGildenStatus(String gildenName, String status) {
